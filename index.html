@@ -1,1 +1,47 @@
-AQ.Ab8RN6JusHgNTDPyrDS0gB8BuXjJQprcVlXjqgRdNYqZt4gW9A
+
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakha - Tujha Mitra</title>
+<style>
+body{font-family:sans-serif;background:#fef9f0;margin:0;padding:10px}
+h1{text-align:center;color:#6a4c93}
+#chat{height:70vh;overflow-y:auto;background:white;border-radius:15px;padding:15px}
+.msg{margin:10px 0;padding:10px;border-radius:12px;max-width:85%}
+.user{background:#dcf8c6;margin-left:auto}
+.ai{background:#f1f0f0}
+#box{display:flex;gap:8px;margin-top:10px}
+input{flex:1;padding:12px;border-radius:20px;border:1px solid #ccc}
+button{padding:12px 20px;border:none;border-radius:20px;background:#6a4c93;color:white}
+</style>
+</head>
+<body>
+<h1>🌿 Sakha - Tujha Mitra</h1>
+<div id="chat"><div class="msg ai">Namaskar mitra! Mi Sakha. Tula kay vatatay, bol mala. Zop, tension, man - kahi pan.</div></div>
+<div id="box"><input id="inp" placeholder="Ithe lih... mala zop yet nahi"><button onclick="send()">Pathav</button></div>
+<script>
+const API_KEY = "TITHI_TUJI_KEY_PASTE_KAR";AQ.Ab8RN6JusHgNTDPyrDS0gB8BuXjJQprcVlXjqgRdNYqZt4gW9A
+async function send(){
+  let inp=document.getElementById('inp');
+  let text=inp.value.trim(); if(!text) return;
+  let chat=document.getElementById('chat');
+  chat.innerHTML+=`<div class="msg user">${text}</div>`;
+  inp.value='';
+  chat.innerHTML+=`<div class="msg ai" id="tmp">Sakha vichar kartoy...</div>`;
+  chat.scrollTop=chat.scrollHeight;
+  try{
+    let res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:"Tu Sakha ahes, Marathi madhe bolnara mitra, premal, lahan uttar de. User: "+text}]}]})
+    });
+    let data=await res.json();
+    let reply=data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry mitra, parat prayatna kar";
+    document.getElementById('tmp').innerText=reply;
+  }catch(e){ document.getElementById('tmp').innerText="Sorry mitra, parat prayatna kar"; }
+  chat.scrollTop=chat.scrollHeight;
+}
+</script>
+</body>
+</html>
