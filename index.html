@@ -2,15 +2,15 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Wellness App</title>
+<title>My Wellness App - Sakha Bot</title>
 <style>
-body{font-family:sans-serif;background:#e8f5e9;margin:0;padding:16px;text-align:center}
-h1{color:#2e7d32}
-.card{background:white;padding:16px;border-radius:16px;margin:12px 0;box-shadow:0 2px 8px #ccc}
-button{background:#2e7d32;color:white;border:0;padding:12px 20px;border-radius:20px;font-size:16px;margin:4px}
-button:active{transform:scale(0.95)}
-.big{font-size:42px;margin:8px}
-input{padding:10px;width:80%;border-radius:10px;border:1px solid #ccc}
+body{font-family:sans-serif;background:#e8f5e9;margin:0;padding:12px;text-align:center}
+h1{color:#2e7d32} .card{background:white;padding:16px;border-radius:16px;margin:10px 0;box-shadow:0 2px 8px #0001}
+button{background:#2e7d32;color:white;border:0;padding:10px 18px;border-radius:20px;font-size:16px}
+.big{font-size:42px} input{padding:12px;width:78%;border-radius:12px;border:1px solid #ccc}
+#chat{height:280px;overflow-y:auto;text-align:left;background:#f1f8e9;padding:10px;border-radius:12px;margin-bottom:10px}
+.msg{padding:8px 12px;border-radius:12px;margin:6px 0;max-width:85%}
+.me{background:#c8e6c9;margin-left:auto} .bot{background:white}
 </style>
 </head>
 <body>
@@ -18,50 +18,34 @@ input{padding:10px;width:80%;border-radius:10px;border:1px solid #ccc}
 <p>Roz thoda changla vha!</p>
 
 <div class="card">
-<h2>💧 Pani Pya</h2>
-<div class="big" id="water">0 Glass</div>
-<button onclick="addWater()">+ 1 Glass Pya</button>
-<button onclick="resetWater()">Reset</button>
+<h3>🤖 Sakha Bot - Gemini sarkha bolel</h3>
+<p style="font-size:13px">Divas-ratra, unlimited bola. Mood, zop, tension, abhyas - kahi pan vichara.</p>
+<div id="chat"><div class="msg bot">Namaskar mitra! 🙏 Mi Sakha. Kasa ahes aaj? Manat kay chalalay, mala sang.</div></div>
+<input id="inp" placeholder="Ithe liha... e.g. mala zop yet nahi">
+<br><br><button onclick="send()">Pathav ➤</button>
+<br><br><button onclick="shareApp()" style="background:#1565c0">📤 App Share Kara</button>
 </div>
 
-<div class="card">
-<h2>😊 Aajcha Mood</h2>
-<div class="big" id="mood">-</div>
-<button onclick="setMood('😃 Khush')">😃</button>
-<button onclick="setMood('😐 Theek')">😐</button>
-<button onclick="setMood('😔 Thaklo')">😔</button>
-<button onclick="setMood('😡 Rag')">😡</button>
-</div>
-
-<div class="card">
-<h2>🧘 Shwas Ghe - 4 Sec</h2>
-<div class="big" id="breathe">Ready?</div>
-<button onclick="startBreathe()">Suruvat Kara</button>
-</div>
-
-<div class="card">
-<h2>✍️ Aajchi 1 Changli Gosht</h2>
-<input id="note" placeholder="Ithe liha...">
-<br><br>
-<button onclick="saveNote()">Save Kara</button>
-<p id="saved"></p>
-</div>
+<div class="card"><div class="big">💧</div><h3>Pani Pya</h3><button onclick="alert('Shabbas! 1 glass pani pyalas 👏')">+ 1 Glass</button></div>
+<div class="card"><div class="big">🧘</div><h3>Shwas Ghya</h3><button onclick="alert('Shwas ghya... sodaa... 3 vela kara 😌')">Suruvat Kara</button></div>
 
 <script>
-let w = 0;
-function addWater(){ w++; document.getElementById('water').innerText = w + ' Glass'; }
-function resetWater(){ w = 0; document.getElementById('water').innerText = '0 Glass'; }
-function setMood(m){ document.getElementById('mood').innerText = m; }
-function startBreathe(){
-  let t = document.getElementById('breathe');
-  t.innerText = 'Shwas Aat Ghe... 4';
-  setTimeout(()=>{ t.innerText = 'Shwas Sod... 4'; }, 4000);
-  setTimeout(()=>{ t.innerText = 'Chan! Parat Kara 😊'; }, 8000);
+const API_KEY = "TUZI_KEY_ITHE_PASTE_KARA";
+async function send(){
+ let t=document.getElementById('inp').value; if(!t) return;
+ let c=document.getElementById('chat');
+ c.innerHTML+=`<div class="msg me">${t}</div>`; document.getElementById('inp').value='';
+ c.innerHTML+=`<div class="msg bot" id="loading">Sakha vichar kartoy... 🤔</div>`; c.scrollTop=c.scrollHeight;
+ try{
+  let r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:"Tu Sakha ahes, Marathi+Hindi mix madhe bolnara jivhalyacha mitra. Lahan, premal, samjun ghenara uttar de. User: "+t}]}]})});
+  let d=await r.json();
+  let ans=d.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry mitra, parat prayatna kar, network thoda slow ahe.";
+  document.getElementById('loading').remove();
+  c.innerHTML+=`<div class="msg bot">${ans}</div>`;
+ }catch(e){ document.getElementById('loading').remove(); c.innerHTML+=`<div class="msg bot">Internet check kar mitra, mi ithech ahe ❤️</div>`; }
+ c.scrollTop=c.scrollHeight;
 }
-function saveNote(){
-  let v = document.getElementById('note').value;
-  document.getElementById('saved').innerText = 'Tumhi lihilay: ' + v;
-}
+function shareApp(){ let link="https://rakeshadsul04-cyber.github.io/wellness-app/"; if(navigator.share){navigator.share({title:'My Wellness App',text:'Ha App bagh, Sakha Bot sobat bol!',url:link})} else {navigator.clipboard.writeText(link); alert('Link Copy zala! Konalahi pathav: '+link);} }
 </script>
 </body>
 </html>
