@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Wellness App</title>
+<style>
+body{font-family:sans-serif;background:#e8f5e9;margin:0;padding:16px;text-align:center}
+h1{color:#2e7d32}
+.card{background:white;padding:16px;border-radius:16px;margin:12px 0;box-shadow:0 2px 8px #ccc}
+button{background:#2e7d32;color:white;border:0;padding:12px 20px;border-radius:20px;font-size:16px;margin:4px}
+button:active{transform:scale(0.95)}
+.big{font-size:42px;margin:8px}
+input{padding:10px;width:80%;border-radius:10px;border:1px solid #ccc}
+</style>
+</head>
+<body>
+<h1>🌿 My Wellness App</h1>
+<p>Roz thoda changla vha!</p>
+
+<div class="card">
+<h2>💧 Pani Pya</h2>
+<div class="big" id="water">0 Glass</div>
+<button onclick="addWater()">+ 1 Glass Pya</button>
+<button onclick="resetWater()">Reset</button>
+</div>
+
+<div class="card">
+<h2>😊 Aajcha Mood</h2>
+<div class="big" id="mood">-</div>
+<button onclick="setMood('😃 Khush')">😃</button>
+<button onclick="setMood('😐 Theek')">😐</button>
+<button onclick="setMood('😔 Thaklo')">😔</button>
+<button onclick="setMood('😡 Rag')">😡</button>
+</div>
+
+<div class="card">
+<h2>🧘 Shwas Ghe - 4 Sec</h2>
+<div class="big" id="breathe">Ready?</div>
+<button onclick="startBreathe()">Suruvat Kara</button>
+</div>
+
+<div class="card">
+<h2>✍️ Aajchi 1 Changli Gosht</h2>
+<input id="note" placeholder="Ithe liha...">
+<br><br>
+<button onclick="saveNote()">Save Kara</button>
+<p id="saved"></p>
+</div>
+
+<script>
+let w = 0;
+function addWater(){ w++; document.getElementById('water').innerText = w + ' Glass'; }
+function resetWater(){ w = 0; document.getElementById('water').innerText = '0 Glass'; }
+function setMood(m){ document.getElementById('mood').innerText = m; }
+function startBreathe(){
+  let t = document.getElementById('breathe');
+  t.innerText = 'Shwas Aat Ghe... 4';
+  setTimeout(()=>{ t.innerText = 'Shwas Sod... 4'; }, 4000);
+  setTimeout(()=>{ t.innerText = 'Chan! Parat Kara 😊'; }, 8000);
+}
+function saveNote(){
+  let v = document.getElementById('note').value;
+  document.getElementById('saved').innerText = 'Tumhi lihilay: ' + v;
+}
+</script>
+</body>
+</html>
